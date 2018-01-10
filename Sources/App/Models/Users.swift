@@ -11,17 +11,19 @@ final class Users {
     
     // Properties
     let UserID:    Int
+    let UserUUID:  String
     let FirstName: String
     let LastName:  String
     let EMail:     String
     let Password:  String
     
     // Initializer
-    init(userID: Int, firstName: String, lastName: String, email: String, password: String) {
+    init(userID: Int, userUUID: String, firstName: String, lastName: String, email: String, password: String) {
         self.UserID    = userID
+        self.UserUUID  = userUUID
         self.FirstName = firstName
         self.LastName  = lastName
         self.EMail     = email
-        self. Password = password
+        self.Password = password
     }
 }

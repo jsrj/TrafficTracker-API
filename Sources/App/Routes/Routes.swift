@@ -11,9 +11,6 @@ extension Droplet {
             return json
         }
 
-        get("plaintext") { req in
-            return "Hello, world!"
-        }
         // In order for a user to successfully talk to the tracker API from their application, the app needs to send the owner key,
         // and userID as ownerID as well as the user's password.
         get("dummy") { req in
@@ -28,9 +25,9 @@ extension Droplet {
 
         // response to requests to /info domain
         // with a description of the request
-        get("info") { req in
-            return req.description
-        }
+        //        get("info") { req in
+        //            return req.description
+        //        }
         
         post("user/new") { req in
             var response = JSON()
@@ -48,6 +45,8 @@ extension Droplet {
                 // generateUID()
                 // }
             }
+            
+            
             func generateUniqueUUID() -> String {
                 let uuid = NSUUID().uuidString.lowercased()
                 // if Users.Find(UserID: uuid) == nil {
@@ -56,6 +55,8 @@ extension Droplet {
                 // generateUniqueUUID()
                 // }
             }
+            
+            
             func backhashPassword(pw: String) -> String {
                 var    bhpw: String = ""
                 if (pw == "unspecified") {
@@ -69,11 +70,10 @@ extension Droplet {
                 }
                 return bhpw
             }
+            
+            
             func ValidateStringField(field: String, resultList: inout [Bool]) -> String {
                 let isValid = field == "unspecified" ? false : true
-                print("Field isValid: \(isValid). Field value was \(field).")
-                print(content["FirstName"]!.string!)
-                print(content["FirstName"]!.isNull)
                 resultList.append(isValid)
                 return field
             }
@@ -90,6 +90,7 @@ extension Droplet {
                 email:     ValidateStringField(field: content["EMail"]!.isNull     ? "unspecified" : content["EMail"]!.string!,     resultList: &validFields),
                 password:  ValidateStringField(field: backhashPassword(pw: content["Password"]!.isNull ? "unspecified" : content["Password"]!.string!), resultList: &validFields)
             )
+            
             try userJson.set("UserID",    newUser.UserID)
             try userJson.set("UserUUID",  newUser.UserUUID)
             try userJson.set("FirstName", newUser.FirstName)
@@ -107,21 +108,19 @@ extension Droplet {
                     allFieldsValid = true
                 }
             }
+            
             if (allFieldsValid) {
-                try response.set("status",  200)
                 try response.set("message", "New User Created!")
                 try response.set("User", userJson)
                 return response
             } else {
                 // Else return an Error Status with an Error Message.
-                try response.set("status", 418)
                 try response.set("message", "Error: One or more fields were not filled, or were filled incorrectly.")
                 return response
             }
         }
 
         //get("description") { req in return req.description }
-        
         //try resource("posts", PostController.self)
     }
 }
